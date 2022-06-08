@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import Layout from './layout/layout'
+import Login from './views/login/login'
+import { Routes, HashRouter, Route } from 'react-router-dom'
+import { Provider } from 'react-redux'
+import { persis, store } from './redux/store'
+import { ConfigProvider } from 'antd'
+import { PersistGate } from 'redux-persist/integration/react'
+import zhCN from 'antd/es/locale/zh_CN';  // 引入中文包
+import 'moment/locale/zh-cn';
+import moment from 'moment';
+import './states/main.scss';
+moment.locale('zh-cn');
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const App = () => {
+
+  return <ConfigProvider locale={zhCN}>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persis}>
+        <HashRouter>
+          <Routes>
+            <Route path='/*' element={<Layout />} />
+            <Route path='/login' element={<Login />} />
+          </Routes>
+        </HashRouter>
+      </PersistGate>
+    </Provider>
+  </ConfigProvider>
 }
 
-export default App;
+export default App

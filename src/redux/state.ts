@@ -1,7 +1,8 @@
 
 const reduxSate: any = {
     userInfo: {},
-    searchData: ''
+    searchData: '',
+    isLayout: true
 }
 
 export default reduxSate

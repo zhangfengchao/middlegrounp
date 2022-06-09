@@ -6,6 +6,9 @@ export const USERINFO: String = 'userInfo';
 
 export const SEARCH_DATA: String = 'searchData'
 
+export const IS_LAYOUT: String = 'isLayout'
+
+
 
 
 

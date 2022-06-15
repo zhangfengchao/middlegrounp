@@ -11,12 +11,12 @@ const router: Array<Router> = [
     {
         path: '/adminHome',
         isLayout: true,
-        component: lazy(() => import('../views/home/adminHome'))
+        component: lazy(() => import('@/views/home/adminHome'))
     },
     {
         path: '/editerForm',
         isLayout: false,
-        component: lazy(() => import('../views/editerForm/editerForm'))
+        component: lazy(() => import('@/views/editerForm/editerForm'))
     },
     // {
     //     path: '/blogDetail',

@@ -1,4 +1,3 @@
-import './App.css'
 import Layout from './layout/layout'
 import Login from './views/login/login'
 import { Routes, HashRouter, Route } from 'react-router-dom'
@@ -13,7 +12,6 @@ import './states/main.scss';
 moment.locale('zh-cn');
 
 const App = () => {
-
   return <ConfigProvider locale={zhCN}>
     <Provider store={store}>
       <PersistGate loading={null} persistor={persis}>

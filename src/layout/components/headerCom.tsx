@@ -1,28 +1,45 @@
-import React, { } from 'react'
+import React, { useEffect } from 'react'
 import { Layout, Menu, Space, Dropdown, Button, Avatar, Popconfirm } from 'antd';
 import type { MenuProps } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { DownOutlined, UserOutlined, EllipsisOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { useSelector } from 'react-redux';
 const { Header } = Layout;
 
-const items1: MenuProps['items'] = ['1', '2', '3'].map(key => ({
-    key,
-    label: `nav ${key}`,
+const items1: MenuProps['items'] = ["首页", "模板中心", '图表中心'].map((i, k) => ({
+    key: k,
+    label: i,
 }));
 
+// const items2: MenuProps['items'] = ["审批", "消息", '帮助', "管理中心"].map((i, k) => ({
+//     key: k,
+//     label: i,
+// }));
+
 const HeaderCom: React.FC = () => {
+    const store = useSelector((state: any) => state.middlegrounp.userInfo)
     const nav = useNavigate()
+
+    useEffect(() => {
+        console.log(store)
+
+        return () => {
+
+        }
+    }, [store])
+
 
     const menu = (
         <Menu
             items={[
                 {
-                    key: '1',
+                    key: '0',
                     label: (
                         <Popconfirm title="请确认是否退出？" icon={<QuestionCircleOutlined style={{ color: 'red' }} />}
                             onConfirm={() => {
                                 nav('/login', {
-                                    replace: true
+                                    replace: true,
+                                    state: {}
                                 })
                             }}>
                             <Button type='text'>退出登录</Button>
@@ -83,10 +100,10 @@ const HeaderCom: React.FC = () => {
 
     return (
         <Header className="header">
-            <div className="titles" >青岛未来移动医疗科技有限公司</div>
-            <Menu className='header_menu' theme="dark" mode="horizontal" defaultSelectedKeys={['2']} items={items1} />
+            <div className="titles size14" >青岛未来移动医疗科技有限公司</div>
+            <Menu className='header_menu' theme="dark" mode="horizontal" items={items1} />
             <Space className='right_box'>
-                <Space className='max'>
+                <Space className='max size10'>
                     <div className='mar_r20'>
                         审批
                     </div>
@@ -110,9 +127,9 @@ const HeaderCom: React.FC = () => {
 
                 <Dropdown overlay={menu} placement="bottomRight" arrow>
                     <Button id='Dropdown' type='text' className='fff'>
-                        <Space>
-                            <Avatar style={{ backgroundColor: '#87d068' }} icon={<UserOutlined />} />
-                            魏笑
+                        <Space className='fff'>
+                            <Avatar style={{ backgroundColor: '#87d068' }} src={store.headimgurl} icon={<UserOutlined />} />
+                            {store.memberName}
                             <DownOutlined />
                         </Space>
                     </Button>

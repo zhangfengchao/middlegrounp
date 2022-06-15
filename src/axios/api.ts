@@ -8,8 +8,8 @@
  * ```
  */
 const apiList = {
-    newBlog: 'newBlogs',
-    getAllClass: 'getAllClass',
+    loginByAccountPassword: '/api/accountManager/login/loginByAccountPassword',
+    getPassword: '/api/accountManager/login/getPassword',
     getAllLabel: 'getAllLabel',
     getHomeBlogs: 'getHomeBlogs'
 }
@@ -25,25 +25,25 @@ export type apiKeyType = keyof typeof apiList;
  * @return {*} 无返回值
  */
 export interface apiKeyDataType {
-    'newBlog': {
+    'loginByAccountPassword': {
         code: number;
-        data: any;
-        message: string
+        data?: any;
+        message?: string
     },
-    'getAllClass': {
+    'getPassword': {
         code: number;
-        data: any;
-        message: string
+        data?: any;
+        message?: string
     },
     'getAllLabel': {
         code: number;
-        data: any;
-        message: string
+        data?: any;
+        message?: string
     },
     'getHomeBlogs': {
         code: number;
-        data: any;
-        message: string
+        data?: any;
+        message?: string
     }
 }
 

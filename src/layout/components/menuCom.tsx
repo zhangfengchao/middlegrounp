@@ -26,7 +26,6 @@ const MenuCom: React.FC = () => {
     return (
         <Menu
             onClick={(e: any) => {
-                console.log(e);
                 nav('/editerForm')
             }}
             mode="inline"

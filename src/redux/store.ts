@@ -11,7 +11,7 @@ import thunk from 'redux-thunk';
 
 // 将所有模块的store的数据汇总
 const allReducer = combineReducers({
-    react: countReducer
+    middlegrounp: countReducer
 })
 
 // 配置持久化的key， 这里默认使用loacl storage 做持久化的

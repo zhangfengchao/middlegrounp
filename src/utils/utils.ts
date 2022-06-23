@@ -9,3 +9,28 @@ export const getDates = async (time: any, type: string) => {
     if (type === 'time') return `${YYYY}/${MM > 9 ? MM : '0' + MM}/${DD > 9 ? DD : '0' + DD} ${HH > 9 ? HH : '0' + HH}:${ii > 9 ? ii : '0' + ii}:${dd ? dd : '0' + dd}`
     else if (type === 'date') return `${YYYY}/${MM > 9 ? MM : '0' + MM}/${DD > 9 ? DD : '0' + DD}`
 }
+
+export class Debounced { //防抖类
+    public use = (
+        func: Function,
+        delay: number,
+        immediate: boolean = false
+    ): Function => {
+        console.log(delay, "???");
+
+        let timer: NodeJS.Timeout;
+        return (...args: any) => {
+            if (immediate) {
+                func.apply(this, args);
+                immediate = false;
+                return;
+            }
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(() => {
+                console.log("执行次数");
+
+                func.apply(this, args);
+            }, delay);
+        };
+    };
+}

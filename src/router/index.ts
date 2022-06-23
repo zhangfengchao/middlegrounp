@@ -6,7 +6,7 @@ interface Router {
     children?: Array<Router>,
     component: any
 }
-// 如果你是js就直接无视这个: Array<Router>的类型限定
+//Array<Router>的类型限定
 const router: Array<Router> = [
     {
         path: '/adminHome',
@@ -18,10 +18,21 @@ const router: Array<Router> = [
         isLayout: false,
         component: lazy(() => import('@/views/editerForm/editerForm'))
     },
-    // {
-    //     path: '/blogDetail',
-    //     component: lazy(() => import('../views/blogDetail/blogDetail'))
-    // },
+    {
+        path: '/memberManage',
+        isLayout: true,
+        component: lazy(() => import('@/views/organize/memberManage/memberManage'))
+    },
+    {
+        path: '/departmentManage',
+        isLayout: false,
+        component: lazy(() => import('@/views/organize/departmentManage/departmentManage'))
+    },
+    {
+        path: '/positionManage',
+        isLayout: true,
+        component: lazy(() => import('@/views/organize/positionManage/positionManage'))
+    },
 
 ]
 

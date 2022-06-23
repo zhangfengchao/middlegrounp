@@ -17,12 +17,15 @@ const SearchCom: React.FC<SearchComType> = (props) => {
     }, [props])
 
     return <Space id='searchCom'>
-        <span className='size8'> {props.label}：</span>
+        {
+            props.label ? <span className='size8'> {props.label}：</span> : <></>
+        }
+
         <Input.Group compact>
             <Select
                 showSearch
                 filterOption={(input, option) => (option!.children as unknown as string).includes(input)}
-                size={'small'}
+
                 defaultValue="=="
                 style={{ width: '30%' }}
             >
@@ -31,7 +34,6 @@ const SearchCom: React.FC<SearchComType> = (props) => {
 
             {
                 props.type === 1 ? <Input
-                    size={'small'}
                     style={{ width: '70%' }}
                     placeholder={props.placeholder}
                 /> : <></>
@@ -39,7 +41,6 @@ const SearchCom: React.FC<SearchComType> = (props) => {
 
             {
                 props.type === 2 ? <DatePicker
-                    size={'small'}
                     style={{ width: '70%' }}
                     placeholder={props.placeholder}
                 /> : <></>
@@ -47,7 +48,6 @@ const SearchCom: React.FC<SearchComType> = (props) => {
 
             {
                 props.type === 3 ? <AutoComplete
-                    size={'small'}
                     style={{ width: '70%' }}
                     placeholder={props.placeholder}
                     options={props.completeOption}
@@ -59,7 +59,7 @@ const SearchCom: React.FC<SearchComType> = (props) => {
                     onChange={(e: any) => {
                         console.log(e)
                     }}
-                    size={'small'}
+
                     style={{ width: '70%' }}
                     filterOption={(input, option) => (option!.children as unknown as string).includes(input)}
                     placeholder={props.placeholder}

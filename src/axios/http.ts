@@ -1,6 +1,11 @@
 import axios, { Method, AxiosInstance, AxiosRequestConfig, AxiosPromise, AxiosInterceptorManager, AxiosResponse } from 'axios';
 import qs from 'qs';
 import { apiKeyType, apiKeyDataType } from './api';
+import { store } from '../redux/store'
+import { countIncrementAction } from '../redux/count_action_creator'
+
+console.log(store.getState().middlegrounp.userInfo, "????????");
+
 
 type ResultDataType = apiKeyDataType[apiKeyType];
 /* 
@@ -30,7 +35,11 @@ let http: NewAxiosInstance = axios.create({
 // 请求拦截器
 const QS_METHOD: Method[] = ['POST', 'post', 'PUT', 'put'];
 const GET_METHOD: Method[] = ['GET', 'get', 'DELETE', 'delete'];
+
 http.interceptors.request.use((response: any) => {
+    const token = store.getState().middlegrounp.userInfo.token
+    if (token && token !== 'null') response.headers.Authorization = token
+
     if (response.method && QS_METHOD.includes(response.method)) {// 这里只处理post请求，根据自己情况修改
         response.data = qs.parse(response.data);
     } else if (response.method && GET_METHOD.includes(response.method)) {//设置GET的请求参数
@@ -41,6 +50,21 @@ http.interceptors.request.use((response: any) => {
 }, error => {
     return error;
 });
+// 对响应数据做点什么
+http.interceptors.response.use(response => {
+    if (response.data.code === 5002) {
+        store.dispatch(countIncrementAction({
+            userInfo: {},
+            menuType: 1
+        }))
+        window.location.hash = "/login"
+    }
+    return response;
+}, error => {
+    // 对响应错误做点什么
+    return Promise.reject(error);
+});
+
 
 //响应拦截器
 http.interceptors.response.use(response => {

@@ -1,32 +1,58 @@
-import React, { } from 'react'
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
+import React, { useEffect, useState } from 'react'
+import IconCom from '@/components/IconCom/IconCom';
 import type { MenuProps } from 'antd';
 import { Menu } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import axiosFunc from '@/axios/axios';
+import { useSelector } from 'react-redux';
 
-const items2: MenuProps['items'] = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
-    (icon, index) => {
-        return {
-            key: `sub${index + 1}`,
-            icon: React.createElement(icon),
-            label: `subnav ${index + 1}`,
-            children: new Array(4).fill(null).map((_, j) => {
-                return {
-                    key: index * 4 + j + 1,
-                    label: `option${index * 4 + j + 1}`,
-                };
-            }),
-        };
-    },
-);
+interface MenuComs {
+    icon?: string
+    id: number
+    key: string
+    children?: any[]
+}
 
 const MenuCom: React.FC = () => {
     const nav = useNavigate()
+    const type = useSelector((state: any) => state.middlegrounp.menuType)
+    const [menuList, setmenuList] = useState<MenuComs[]>([])
+    const items2: MenuProps['items'] = menuList.map(
+        (i, index) => {
+            return {
+                key: i.key,
+                icon: <IconCom icon={(i as any).icon} />,
+                label: (i as any).label,
+                children: i.children
+            };
+        },
+    );
+    useEffect(() => {
+        console.log(type);
+        getAllMenu()
+        return () => {
+
+        }
+    }, [type])// eslint-disable-line
+
+    const getAllMenu = async () => {
+        let res = await axiosFunc({
+            url: 'getUsableFunctions',
+            method: 'GET',
+            data: {
+                type: 2,
+            }
+        })
+
+        if (res.code === 200) setmenuList(res.data)
+    }
+
 
     return (
         <Menu
             onClick={(e: any) => {
-                nav('/editerForm')
+                console.log(e.key);
+                nav(e.key)
             }}
             mode="inline"
             defaultSelectedKeys={['1']}

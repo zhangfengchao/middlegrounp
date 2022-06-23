@@ -8,6 +8,10 @@ export const SEARCH_DATA: String = 'searchData'
 
 export const IS_LAYOUT: String = 'isLayout'
 
+export const MENU_TYPE: String = 'menuType'
+
+
+
 
 
 

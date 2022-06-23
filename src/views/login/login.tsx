@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { Divider, Input, Form, Button, Checkbox, Space, message } from 'antd'
 import type { FormInstance } from 'antd'
 import axiosFunc from '@/axios/axios'
@@ -6,12 +6,55 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { countIncrementAction } from '@/redux/count_action_creator'
 import hex_md5 from '@/utils/md5'
+import { Debounced } from '@/utils/utils'
 
 const Login: React.FC = () => {
     const nav = useNavigate()
     const dispatch = useDispatch()
     const formRef = React.createRef<FormInstance>();
     const [phoneNumber, setphoneNumber] = useState()
+    const timer = useRef<NodeJS.Timeout>()
+    const [timerNumber, settimerNumber] = useState(30)
+    const nums = useRef<number>(30)
+
+    useEffect(() => {
+        return () => {
+            clearInterval(timer.current)
+        }
+    }, [])
+
+    const getPassword = async () => {
+        if (!phoneNumber) {
+            message.error("请先输入登录名 :)")
+            return
+        }
+
+        const res = await axiosFunc({
+            url: 'getPassword',
+            method: 'GET',
+            data: {
+                phoneNumber
+            }
+        })
+
+        if (res.code === 200) {
+            message.success(res.message)
+            timer.current = setInterval(() => {
+                nums.current--
+                settimerNumber(nums.current)
+                if (nums.current < 1) {
+                    settimerNumber(30)
+                    nums.current = 30
+                    clearInterval(timer.current)
+                }
+            }, 1000)
+
+        }
+        else message.error(res.message)
+    }
+
+    const debounced: Function = new Debounced().use(getPassword, 500) //获取验证码防抖
+
 
     return <div className='flex_center page'>
         <div className='user_login'>
@@ -95,23 +138,11 @@ const Login: React.FC = () => {
                         >
                             <Space>
                                 <Input placeholder='动态密码' />
-                                <Button className='login_getPW' type={'primary'} onClick={async () => {
-                                    if (!phoneNumber) {
-                                        message.error("请先输入登录名 :)")
-                                        return
-                                    }
-                                    const res = await axiosFunc({
-                                        url: 'getPassword',
-                                        method: 'GET',
-                                        data: {
-                                            phoneNumber
-                                        }
-                                    })
-
-                                    if (res.code === 200) message.success(res.message)
-                                    else message.error(res.message)
-
-                                }}>获取密码</Button>
+                                <Button
+                                    disabled={timerNumber !== 30}
+                                    className='login_getPW'
+                                    type={'primary'}
+                                    onClick={async () => debounced()}>{timerNumber !== 30 ? timerNumber : '获取密码'}</Button>
                             </Space>
                         </Form.Item>
 

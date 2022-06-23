@@ -3,24 +3,36 @@ import React, { Suspense, useEffect, useState } from 'react';
 import HeaderCom from './components/headerCom';
 import MenuCom from './components/menuCom';
 import router from '../router'
+import { useNavigate } from 'react-router-dom';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { MenuUnfoldOutlined, MenuFoldOutlined, SettingOutlined } from '@ant-design/icons'
+import { useSelector } from 'react-redux';
 const { Content, Sider } = Layout;
 
 const Layouts: React.FC = () => {
+    const nav = useNavigate()
+    const userInfo = useSelector((state: any) => state.middlegrounp.userInfo)
+
     const [isLayout, setisLayout] = useState(true)
     const location = useLocation()
     const [collapsedBool, setcollapsedBool] = useState(false)
     const [siderState, setsiderState] = useState(false)
     useEffect(() => {
+        if (Object.keys(userInfo).length < 1) {
+            nav('login', {
+                replace: true,
+                state: {
+                    message: '系统错误'
+                }
+            })
+        }
         router.forEach(item => {
             if (item.path === location.pathname) setisLayout(item.isLayout ? true : false)
         })
-
         return () => {
 
         }
-    }, [location])
+    }, [location, userInfo, nav])
 
     return (
         <Layout className='layout'>

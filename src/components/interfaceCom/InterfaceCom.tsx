@@ -28,7 +28,7 @@ export interface OptionChildrenType {
 export interface SearchComType {
     optionChildren: OptionChildrenType[]
     type: number //组件类型1：输入框，2:日期择器，3:提示输入框，4:下拉选择，
-    label: string
+    label?: string
     placeholder: string
     completeOption: any[]
 }

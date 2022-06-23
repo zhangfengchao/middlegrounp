@@ -1,13 +1,97 @@
-import React, { useState } from 'react'
-import { Layout, Space } from 'antd'
+import React, { useState, useEffect } from 'react'
+import { Layout, Space, Table, Button } from 'antd'
 import { FilterOutlined, SettingOutlined } from '@ant-design/icons'
-import TabsCom from '../../components/tablePage/TabsCom'
-import { TabList, OptionChildrenType, SearchComType } from '../../components/interfaceCom/InterfaceCom'
-import SearchCom from '../../components/searchCom/searchCom'
+import TabsCom from '@/components/tablePage/TabsCom'
+import type { ColumnsType, TableProps } from 'antd/lib/table';
+import { TabList, OptionChildrenType, SearchComType } from '@/components/interfaceCom/InterfaceCom'
+import SearchCom from '@/components/searchCom/searchCom'
 
 const { Content } = Layout
+interface DataType {
+    key: React.Key;
+    name: string;
+    age: number;
+    address: string;
+}
 
 const AdminHome: React.FC = () => {
+    const [columns, setcolumns] = useState<ColumnsType<DataType>>([
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            sorter: (a: any, b: any) => a.name.length - b.name.length,
+            sortDirections: ['descend'],
+            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+                <div className="table-filter-dropdown" >
+                    {/* {this.itemSelection(treeData, dataIndex, selectedKeys, setSelectedKeys)} */}
+                    <Space>
+                        <Button
+                            // onClick={() => this.handleReset(clearFilters)}
+                            size="small"
+                            style={{ width: 50 }}
+                        >
+                            清空
+                        </Button>
+                        <Button
+                            type="primary"
+                            // onClick={() => this.handleSearch(confirm)}
+                            size="small"
+                            style={{ width: 60 }}
+                        >
+                            确认
+                        </Button>
+                    </Space>
+                </div>
+            ),
+        },
+        {
+            title: 'Age',
+            dataIndex: 'age',
+            defaultSortOrder: 'descend',
+            sorter: (a: any, b: any) => a.age - b.age,
+        },
+        {
+            title: 'Address',
+            dataIndex: 'address',
+            //    filters: [
+            //         {
+            //             text: 'London',
+            //             value: 'London',
+            //         },
+            //         {
+            //             text: 'New York',
+            //             value: 'New York',
+            //         },
+            //     ], 
+        },
+    ])
+
+    const [data, setdata] = useState([
+        {
+            key: '1',
+            name: 'John Brown',
+            age: 32,
+            address: 'New York No. 1 Lake Park',
+        },
+        {
+            key: '2',
+            name: 'Jim Green',
+            age: 42,
+            address: 'London No. 1 Lake Park',
+        },
+        {
+            key: '3',
+            name: 'Joe Black',
+            age: 32,
+            address: 'Sidney No. 1 Lake Park',
+        },
+        {
+            key: '4',
+            name: 'Jim Red',
+            age: 32,
+            address: 'London No. 2 Lake Park',
+        },
+    ])
 
     const [tabLists] = useState<TabList[]>([
         {
@@ -131,16 +215,88 @@ const AdminHome: React.FC = () => {
         }
     ])
 
-    return <div className='pages'>
-        <Space className='padd5 site-layout-background'>
-            <div className='size12'>
-                全部客户
-            </div>
+    const [btnState, setbtnState] = useState<boolean>(true)
 
-            <TabsCom {...{ tabList: tabLists }} onTabChange={(e: number) => {
-                console.log(e, "阿啦啦啦")
-            }} />
-        </Space>
+    useEffect(() => {
+
+        return () => {
+
+        }
+    }, [])
+
+    const setColumOperate = async () => {
+        const datas = JSON.parse(JSON.stringify(data))
+        datas.unshift({
+            key: '-',
+            name: '-',
+            age: '-',
+            address: '-',
+        })
+        setdata(datas)
+        const newColums = JSON.parse(JSON.stringify(columns))
+        newColums.map((column: any) => {
+            column.render = (text: any, record: DataType, index: number) => {
+                if (index === 0) {
+                    if (column.title === 'Name') return <SearchCom {...{
+                        optionChildren: searComOptions,
+                        type: 1,
+                        placeholder: '请选择范围',
+                        completeOption: []
+                    }} />
+                }
+
+                return text
+            }
+            return column
+        })
+
+        setcolumns(newColums)
+
+        return
+    }
+
+    const removeColumOperate = async () => {
+        const datas = JSON.parse(JSON.stringify(data))
+        datas.shift()
+        setdata(datas)
+        const newColums = JSON.parse(JSON.stringify(columns))
+        newColums.map((column: any) => {
+            column.render = (text: any, record: DataType, index: number) => {
+                return text
+            }
+            return column
+        })
+
+        setcolumns(newColums)
+        return
+    }
+
+    const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
+        console.log('params', pagination, filters, sorter, extra);
+    };
+
+    const rowSelection = {
+        onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
+            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+        },
+        getCheckboxProps: (record: DataType) => ({
+            disabled: record.name === '-', // Column configuration not to be checked
+            name: record.name,
+        }),
+    };
+
+    return <div className='pages'>
+        <div className=''>
+            <Space className='padd5 site-layout-background'>
+                <div className='size16'>
+                    全部客户
+                </div>
+
+                <TabsCom {...{ tabList: tabLists }} onTabChange={(e: number) => {
+                    console.log(e, "阿啦啦啦")
+                }} />
+            </Space>
+        </div>
 
         <Layout className='padd5'>
             <Content className='site-layout-background content'>
@@ -152,15 +308,28 @@ const AdminHome: React.FC = () => {
 
                 <div className='flex'>
                     <div className='flex_wrap'>
+                        <label className='switch_lable' onClick={async () => {
+                            if (btnState) {
+                                await setColumOperate()
+                                setbtnState(false)
+                            }
+                            else {
+                                await removeColumOperate()
+                                setbtnState(true)
+                            }
+                        }}>
+                            <span className={btnState ? 'one_switch flex_center padd_rl5' : 'two_switch flex_center padd_rl5'}>常用</span>
+                            <span className={!btnState ? 'one_switch flex_center padd_rl5' : 'two_switch flex_center padd_rl5'}>高级</span>
+                        </label>
                         {
-                            searchComList.map((i: SearchComType, k: number) =>
+                            btnState ? searchComList.map((i: SearchComType, k: number) =>
                                 <div key={k} className='padd_lr10 padd_b10'>
                                     <SearchCom
                                         {
                                         ...i
                                         } />
                                 </div>
-                            )
+                            ) : <></>
                         }
                     </div>
                     <Space className='mar_r10'>
@@ -169,6 +338,15 @@ const AdminHome: React.FC = () => {
                         <SettingOutlined className='size12 grey' />
                     </Space>
                 </div>
+
+                <Table
+                    scroll={{ y: 'calc(100vh - 430px)' }}
+                    rowSelection={{
+                        ...rowSelection,
+                    }}
+                    columns={columns}
+                    dataSource={data}
+                    onChange={onChange} />
             </Content>
         </Layout>
     </div>

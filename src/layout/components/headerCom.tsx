@@ -6,7 +6,7 @@ import { DownOutlined, UserOutlined, EllipsisOutlined, QuestionCircleOutlined } 
 import { useSelector } from 'react-redux';
 const { Header } = Layout;
 
-const items1: MenuProps['items'] = ["首页", "模板中心", '图表中心'].map((i, k) => ({
+const items1: MenuProps['items'] = ["首页"].map((i, k) => ({
     key: k,
     label: i,
 }));
@@ -101,7 +101,7 @@ const HeaderCom: React.FC = () => {
     return (
         <Header className="header">
             <div className="titles size14" >青岛未来移动医疗科技有限公司</div>
-            <Menu className='header_menu' theme="dark" mode="horizontal" items={items1} />
+            <Menu className='header_menu' onClick={e => nav('/')} theme="dark" mode="horizontal" items={items1} />
             <Space className='right_box'>
                 <Space className='max size10'>
                     <div className='mar_r20'>

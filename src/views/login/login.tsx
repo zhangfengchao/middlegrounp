@@ -93,7 +93,6 @@ const Login: React.FC = () => {
                                     password: hex_md5((e as any).password)
                                 }
                             })
-                            console.log(res);
 
                             if (res.code === 200) {
                                 dispatch(countIncrementAction({

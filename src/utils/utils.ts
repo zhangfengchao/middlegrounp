@@ -16,8 +16,6 @@ export class Debounced { //防抖类
         delay: number,
         immediate: boolean = false
     ): Function => {
-        console.log(delay, "???");
-
         let timer: NodeJS.Timeout;
         return (...args: any) => {
             if (immediate) {
@@ -27,7 +25,6 @@ export class Debounced { //防抖类
             }
             if (timer) clearTimeout(timer);
             timer = setTimeout(() => {
-                console.log("执行次数");
 
                 func.apply(this, args);
             }, delay);

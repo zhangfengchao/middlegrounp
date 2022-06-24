@@ -21,7 +21,8 @@ const TabsCom: React.FC<TabsInter> = (props) => {
                 type={'card'}
                 defaultActiveKey="1" tabPosition={'top'} onChange={(e: any) => props.onTabChange(e)
                 } moreIcon={
-                    <Space>
+                    <Space className='w_100 size12 grey'>
+                        更多
                         <DownOutlined />
                     </Space>}>
                 {props.tabList.map((i: TabList) => (

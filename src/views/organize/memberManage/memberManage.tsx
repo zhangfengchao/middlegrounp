@@ -427,7 +427,7 @@ const MemberManage: React.FC = () => {
             width: 280,
             render: (_, state: DataType) => <Space>
                 <div
-                    className='admin_color cursor'
+                    className='admin_color cursor size14'
                     onClick={async () => {
                         memberIds.current = state.memberId
                         await getMemberDetail()
@@ -444,13 +444,10 @@ const MemberManage: React.FC = () => {
                         okText="是"
                         cancelText="否"
                     >
-                        <Button
-                            type='text'
-                            size='small'
-                            className='admin_color cursor'
-                        >
+                        <div
+                            className='admin_color cursor size14'>
                             员工离职
-                        </Button>
+                        </div>
                     </Popconfirm> : <></>
                 }
 
@@ -461,13 +458,11 @@ const MemberManage: React.FC = () => {
                         okText="是"
                         cancelText="否"
                     >
-                        <Button
-                            type='text'
-                            size='small'
-                            className='admin_color cursor'
+                        <div
+                            className='admin_color cursor size14'
                         >
                             解绑微信绑定
-                        </Button>
+                        </div>
                     </Popconfirm> : <></>
                 }
 

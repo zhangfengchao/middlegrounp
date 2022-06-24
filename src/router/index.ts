@@ -3,7 +3,7 @@ interface Router {
     name?: string,
     path: string,
     isLayout: Boolean,
-    children?: Array<Router>,
+    children?: Router[],
     component: any
 }
 //Array<Router>的类型限定
@@ -33,6 +33,19 @@ const router: Array<Router> = [
         isLayout: true,
         component: lazy(() => import('@/views/organize/positionManage/positionManage'))
     },
+    {
+        name: "数据查重",
+        path: '/cnki',
+        isLayout: false,
+        component: lazy(() => import('@/views/cnki/cnki'))
+    },
+    {
+        name: "新建客户",
+        path: '/addCustomer',
+        isLayout: false,
+        component: lazy(() => import('@/views/home/addCustomer'))
+    },
+
 
 ]
 

@@ -18,7 +18,7 @@ const SearchCom: React.FC<SearchComType> = (props) => {
 
     return <Space id='searchCom'>
         {
-            props.label ? <span className='size8'> {props.label}：</span> : <></>
+            props.label ? <span className='size14'> {props.label}：</span> : <></>
         }
 
         <Input.Group compact>

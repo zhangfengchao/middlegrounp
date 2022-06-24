@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { Layout, Space, Table, Button } from 'antd'
+import { Layout, Space, Table, Button, Input } from 'antd'
 import { FilterOutlined, SettingOutlined } from '@ant-design/icons'
 import TabsCom from '@/components/tablePage/TabsCom'
 import type { ColumnsType, TableProps } from 'antd/lib/table';
 import { TabList, OptionChildrenType, SearchComType } from '@/components/interfaceCom/InterfaceCom'
 import SearchCom from '@/components/searchCom/searchCom'
+import HomeModal from './components/homeModal';
+import { useNavigate } from 'react-router-dom';
+
+const { Search } = Input
 
 const { Content } = Layout
 interface DataType {
@@ -20,49 +24,17 @@ const AdminHome: React.FC = () => {
             title: 'Name',
             dataIndex: 'name',
             sorter: (a: any, b: any) => a.name.length - b.name.length,
-            sortDirections: ['descend'],
-            filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
-                <div className="table-filter-dropdown" >
-                    {/* {this.itemSelection(treeData, dataIndex, selectedKeys, setSelectedKeys)} */}
-                    <Space>
-                        <Button
-                            // onClick={() => this.handleReset(clearFilters)}
-                            size="small"
-                            style={{ width: 50 }}
-                        >
-                            清空
-                        </Button>
-                        <Button
-                            type="primary"
-                            // onClick={() => this.handleSearch(confirm)}
-                            size="small"
-                            style={{ width: 60 }}
-                        >
-                            确认
-                        </Button>
-                    </Space>
-                </div>
-            ),
         },
         {
             title: 'Age',
             dataIndex: 'age',
-            defaultSortOrder: 'descend',
             sorter: (a: any, b: any) => a.age - b.age,
         },
         {
             title: 'Address',
             dataIndex: 'address',
-            //    filters: [
-            //         {
-            //             text: 'London',
-            //             value: 'London',
-            //         },
-            //         {
-            //             text: 'New York',
-            //             value: 'New York',
-            //         },
-            //     ], 
+            sorter: (a: any, b: any) => a.age - b.age,
+
         },
     ])
 
@@ -95,29 +67,57 @@ const AdminHome: React.FC = () => {
 
     const [tabLists] = useState<TabList[]>([
         {
-            name: '啦啦啦',
+            name: '国际部客户登记',
             key: 1
         },
         {
-            name: '啦啦啦',
+            name: '国内销售客户登记',
             key: 2
         },
         {
-            name: '啦啦啦',
+            name: '目标医院',
+            key: 5
+        }
+    ])
+
+    const [bottomTabLists] = useState<TabList[]>([
+        {
+            name: '全部',
+            key: 1
+        },
+        {
+            name: '7天未跟进',
+            key: 2
+        },
+        {
+            name: '今日新增',
             key: 3
         },
         {
-            name: '啦啦啦',
+            name: '本周新增',
             key: 4
         },
         {
-            name: '啦啦啦',
+            name: '即将退出公海池',
             key: 5
         },
         {
-            name: '啦啦啦',
+            name: '我负责的',
             key: 6
         },
+        {
+            name: '我协同的',
+            key: 7
+        },
+        {
+            name: '下属负责的',
+            key: 8
+        },
+        {
+            name: '下属协同的',
+            key: 9
+        }
+
     ])
 
     const [searComOptions] = useState<OptionChildrenType[]>([
@@ -215,138 +215,196 @@ const AdminHome: React.FC = () => {
         }
     ])
 
+    const [searchComLists] = useState<SearchComType[]>([
+        {
+            optionChildren: searComOptions,
+            type: 1,
+            placeholder: '请选择范围',
+            completeOption: []
+        },
+        {
+            optionChildren: searComOptions,
+            type: 3,
+            placeholder: '请选择或输入',
+            completeOption: [
+                {
+                    key: 1,
+                    value: '张三'
+                },
+                {
+                    key: 2,
+                    value: '李四'
+                },
+                {
+                    key: 3,
+                    value: '王五'
+                }
+            ]
+        },
+        {
+            optionChildren: searComOptions,
+            type: 4,
+            placeholder: '请选择',
+            completeOption: [{
+                label: '张三',
+                value: 1
+            },
+            {
+                label: '李四',
+                value: 2
+            },
+            {
+                label: '王五',
+                value: 3
+            }]
+        }
+    ])
+
     const [btnState, setbtnState] = useState<boolean>(true)
 
+    const [selectedRowKeys, setselectedRowKeys] = useState<React.Key[]>([])
+
+    const [isHomeModal, setisHomeModal] = useState(false)
+
+
+    const nav = useNavigate()
+
     useEffect(() => {
-
         return () => {
-
+            // timer = 0
         }
     }, [])
 
-    const setColumOperate = async () => {
-        const datas = JSON.parse(JSON.stringify(data))
-        datas.unshift({
-            key: '-',
-            name: '-',
-            age: '-',
-            address: '-',
-        })
-        setdata(datas)
-        const newColums = JSON.parse(JSON.stringify(columns))
-        newColums.map((column: any) => {
-            column.render = (text: any, record: DataType, index: number) => {
-                if (index === 0) {
-                    if (column.title === 'Name') return <SearchCom {...{
-                        optionChildren: searComOptions,
-                        type: 1,
-                        placeholder: '请选择范围',
-                        completeOption: []
-                    }} />
-                }
-
-                return text
-            }
-            return column
-        })
-
-        setcolumns(newColums)
-
-        return
-    }
-
-    const removeColumOperate = async () => {
-        const datas = JSON.parse(JSON.stringify(data))
-        datas.shift()
-        setdata(datas)
-        const newColums = JSON.parse(JSON.stringify(columns))
-        newColums.map((column: any) => {
-            column.render = (text: any, record: DataType, index: number) => {
-                return text
-            }
-            return column
-        })
-
-        setcolumns(newColums)
-        return
-    }
 
     const onChange: TableProps<DataType>['onChange'] = (pagination, filters, sorter, extra) => {
         console.log('params', pagination, filters, sorter, extra);
     };
 
     const rowSelection = {
-        onChange: (selectedRowKeys: React.Key[], selectedRows: DataType[]) => {
-            console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-        },
-        getCheckboxProps: (record: DataType) => ({
-            disabled: record.name === '-', // Column configuration not to be checked
-            name: record.name,
-        }),
+        selectedRowKeys,
+        onChange: (newSelectedRowKeys: React.Key[]) => {
+            setselectedRowKeys(newSelectedRowKeys)
+        }
     };
 
     return <div className='pages'>
-        <div className=''>
-            <Space className='padd5 site-layout-background'>
+        <HomeModal {
+            ...{
+                isModalVisible: isHomeModal
+            }
+        } onClose={() => setisHomeModal(false)} />
+        <div className='padd5 site-layout-background flex_row_sb'>
+            <Space className='mar_l10'>
                 <div className='size16'>
                     全部客户
                 </div>
 
-                <TabsCom {...{ tabList: tabLists }} onTabChange={(e: number) => {
-                    console.log(e, "阿啦啦啦")
-                }} />
+                <div className='top_tabs'>
+                    <TabsCom {...{ tabList: tabLists }} onTabChange={(e: number) => {
+                        console.log(e, "阿啦啦啦")
+                    }} />
+                </div>
+            </Space>
+
+            <Space className='mar_r10'>
+                <div className='mar_r10'>
+                    <Search placeholder='客户名称或者客户电话搜索' onSearch={(e: any) => console.log(e)} />
+                </div>
+                <Button type={'primary'} className='mar_r10' onClick={() => nav('/addCustomer')}>
+                    新建
+                </Button>
+
+                <Button className='mar_r10' onClick={() => nav('/cnki')}>
+                    查重
+                </Button>
+
             </Space>
         </div>
 
         <Layout className='padd5'>
             <Content className='site-layout-background content'>
-                <div className='padd_lr10 top_tab mar_b10'>
-                    <TabsCom {...{ tabList: tabLists }} onTabChange={(e: number) => {
-                        console.log(e, "阿啦啦啦")
-                    }} />
+                <div className='border_b flex_row_sb'>
+                    <div className='top_tab '>
+                        <TabsCom {...{ tabList: bottomTabLists }} onTabChange={(e: number) => {
+                            console.log(e, "阿啦啦啦")
+                        }} />
+                    </div>
+
+                    <div className='mar_r20 cursor size16' onClick={() => setisHomeModal(true)}>
+                        分组管理
+                    </div>
                 </div>
 
-                <div className='flex'>
-                    <div className='flex_wrap'>
-                        <label className='switch_lable' onClick={async () => {
+                <div className='sb border_b'>
+                    <div className='flex padd_tb10'>
+                        <label className={btnState ? 'switch_lable' : 'switch_lable'} onClick={async () => {
                             if (btnState) {
-                                await setColumOperate()
+                                // await setColumOperate()
                                 setbtnState(false)
                             }
                             else {
-                                await removeColumOperate()
+                                // await removeColumOperate()
                                 setbtnState(true)
                             }
                         }}>
                             <span className={btnState ? 'one_switch flex_center padd_rl5' : 'two_switch flex_center padd_rl5'}>常用</span>
                             <span className={!btnState ? 'one_switch flex_center padd_rl5' : 'two_switch flex_center padd_rl5'}>高级</span>
                         </label>
-                        {
-                            btnState ? searchComList.map((i: SearchComType, k: number) =>
-                                <div key={k} className='padd_lr10 padd_b10'>
-                                    <SearchCom
-                                        {
-                                        ...i
-                                        } />
-                                </div>
-                            ) : <></>
-                        }
+                        <div className='flex_wrap'>
+                            {
+                                btnState ? searchComList.map((i: SearchComType, k: number) =>
+                                    <div key={k} className='padd_lr10 padd_b10'>
+                                        <SearchCom
+                                            {
+                                            ...i
+                                            } />
+                                    </div>
+                                ) : <></>
+                            }
+                        </div>
                     </div>
-                    <Space className='mar_r10'>
-                        <FilterOutlined className='size12 grey' />
+                    <div className='inline_flex'>
+                        <FilterOutlined className='size16 grey mar_r10' />
 
-                        <SettingOutlined className='size12 grey' />
-                    </Space>
+                        <SettingOutlined className='size16 grey' />
+                    </div>
                 </div>
 
                 <Table
-                    scroll={{ y: 'calc(100vh - 430px)' }}
+                    sticky
+                    scroll={{ y: 'calc(100vh - 390px)' }}
                     rowSelection={{
                         ...rowSelection,
                     }}
                     columns={columns}
                     dataSource={data}
-                    onChange={onChange} />
+                    onChange={onChange}
+                    summary={() => (
+                        <Table.Summary >
+                            {
+                                !btnState ? <Table.Summary.Row>
+                                    <Table.Summary.Cell index={0} key="123"></Table.Summary.Cell>
+                                    {
+                                        searchComLists.map((i: SearchComType, k: number) =>
+                                            <Table.Summary.Cell index={k + 1} key={k}>
+                                                <SearchCom
+                                                    {
+                                                    ...i
+                                                    } />
+                                            </Table.Summary.Cell>
+                                        )
+                                    }
+                                </Table.Summary.Row> : <></>
+                            }
+
+                        </Table.Summary>
+                    )}
+
+                    footer={() => <Space>
+                        当前已选{selectedRowKeys.length}条
+                    </Space>
+                    }
+                />
             </Content>
         </Layout>
     </div>

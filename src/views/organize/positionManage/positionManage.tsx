@@ -207,7 +207,9 @@ const PositionMange: React.FC = () => {
                     <Search
                         placeholder="搜索职位"
                         onSearch={async (filterContent) => { }}
-                        style={{ width: 200 }} />
+                        style={{ width: 200 }}
+                        className="mar_r10"
+                    />
 
                     <Button type={'primary'} onClick={() => {
                         setisAdd(true)

@@ -133,6 +133,77 @@ const EditerForm: React.FC = () => {
                                     },
                                 },
                             },
+                            {
+                                text: '日期范围',
+                                name: 'dateRange',
+                                schema: {
+                                    title: '日期范围',
+                                    type: 'range',
+                                    format: 'dateTime',
+                                    props: {
+                                        placeholder: ['开始时间', '结束时间'],
+                                    },
+                                },
+                                setting: {
+                                    format: {
+                                        title: '类型',
+                                        type: 'string',
+                                        enum: ['dateTime', 'date'],
+                                        enumNames: ['日期时间', '日期'],
+                                    },
+                                },
+                            },
+                            {
+                                text: '数字（slider）',
+                                name: 'slider',
+                                schema: {
+                                    title: '带滑动条',
+                                    type: 'array ',
+                                    widget: 'treeSelect',
+                                    readOnlyWidget: [
+                                        {
+                                            title: 'Node1',
+                                            value: '0-0',
+                                            key: '0-0',
+                                            children: [
+                                                {
+                                                    title: 'Child Node1',
+                                                    value: '0-0-0',
+                                                    key: '0-0-0',
+                                                },
+                                            ],
+                                        },
+                                        {
+                                            title: 'Node2',
+                                            value: '0-1',
+                                            key: '0-1',
+                                            children: [
+                                                {
+                                                    title: 'Child Node3',
+                                                    value: '0-1-0',
+                                                    key: '0-1-0',
+                                                },
+                                                {
+                                                    title: 'Child Node4',
+                                                    value: '0-1-1',
+                                                    key: '0-1-1',
+                                                },
+                                                {
+                                                    title: 'Child Node5',
+                                                    value: '0-1-2',
+                                                    key: '0-1-2',
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                },
+                                setting: {
+                                    default: {
+                                        title: '默认值',
+                                        type: 'number',
+                                    },
+                                },
+                            },
                         ],
                     },
                 ]}

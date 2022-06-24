@@ -1,15 +1,12 @@
 import React, { useEffect } from 'react'
 import { Layout, Menu, Space, Dropdown, Button, Avatar, Popconfirm } from 'antd';
-import type { MenuProps } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { DownOutlined, UserOutlined, EllipsisOutlined, QuestionCircleOutlined } from '@ant-design/icons'
-import { useSelector } from 'react-redux';
+import { DownOutlined, UserOutlined, QuestionCircleOutlined } from '@ant-design/icons'
+import { useSelector, useDispatch } from 'react-redux';
+import { menuTypeAction } from '@/redux/count_action_creator';
+
 const { Header } = Layout;
 
-const items1: MenuProps['items'] = ["首页"].map((i, k) => ({
-    key: k,
-    label: i,
-}));
 
 // const items2: MenuProps['items'] = ["审批", "消息", '帮助', "管理中心"].map((i, k) => ({
 //     key: k,
@@ -19,6 +16,7 @@ const items1: MenuProps['items'] = ["首页"].map((i, k) => ({
 const HeaderCom: React.FC = () => {
     const store = useSelector((state: any) => state.middlegrounp.userInfo)
     const nav = useNavigate()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         console.log(store)
@@ -51,79 +49,37 @@ const HeaderCom: React.FC = () => {
         />
     );
 
-    const menus = (
-        <Menu
-            items={[
-                {
-                    key: '1',
-                    label: (
-                        <Button type='text' onClick={() => {
-                            nav('/login', {
-                                replace: true
-                            })
-                        }}>审批</Button>
-                    ),
-                },
-                {
-                    key: '2',
-                    label: (
-                        <Button type='text' onClick={() => {
-                            nav('/login', {
-                                replace: true
-                            })
-                        }}>消息</Button>
-                    ),
-                },
-                {
-                    key: '3',
-                    label: (
-                        <Button type='text' onClick={() => {
-                            nav('/login', {
-                                replace: true
-                            })
-                        }}>帮助</Button>
-                    ),
-                },
-                {
-                    key: '4',
-                    label: (
-                        <Button type='text' onClick={() => {
-                            nav('/login', {
-                                replace: true
-                            })
-                        }}>管理中心</Button>
-                    ),
-                },
-            ]}
-        />
-    );
 
     return (
         <Header className="header">
             <div className="titles size14" >青岛未来移动医疗科技有限公司</div>
-            <Menu className='header_menu' onClick={e => nav('/')} theme="dark" mode="horizontal" items={items1} />
+            <div className='header_menu cursor size18' onClick={() => {
+                dispatch(menuTypeAction({
+                    menuType: 1
+                }))
+            }} >首页</div>
             <Space className='right_box'>
-                <Space className='max size10'>
-                    <div className='mar_r20'>
+                <Space className='max size20 size16'>
+                    <div className='mar_r20 cursor'>
                         审批
                     </div>
 
-                    <div className='mar_r20'>
+                    <div className='mar_r20 cursor'>
                         消息
                     </div>
 
-                    <div className='mar_r20'>
+                    <div className='mar_r20 cursor'>
                         帮助
                     </div>
 
-                    <div className=''>
+                    <div className='cursor' onClick={() => {
+                        dispatch(menuTypeAction({
+                            menuType: 2
+                        }))
+                    }}>
                         管理中心
                     </div>
                 </Space>
-
-                <Dropdown className='min' overlay={menus} placement="bottomRight" arrow>
-                    <EllipsisOutlined />
-                </Dropdown>
 
                 <Dropdown overlay={menu} placement="bottomRight" arrow>
                     <Button id='Dropdown' type='text' className='fff'>

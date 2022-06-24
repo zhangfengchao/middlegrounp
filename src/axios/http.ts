@@ -4,9 +4,6 @@ import { apiKeyType, apiKeyDataType } from './api';
 import { store } from '../redux/store'
 import { countIncrementAction } from '../redux/count_action_creator'
 
-console.log(store.getState().middlegrounp.userInfo, "????????");
-
-
 type ResultDataType = apiKeyDataType[apiKeyType];
 /* 
 NewAxiosInstance接口得根据自己情况来定
